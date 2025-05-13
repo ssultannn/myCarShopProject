@@ -82,6 +82,8 @@ public class SecurityConfig {
             .authorizeRequests(auth -> auth
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.GET , "/cars/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+       
                 .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
             )
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Без сессий, только JWT
