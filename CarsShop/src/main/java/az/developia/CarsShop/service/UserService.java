@@ -49,6 +49,7 @@ public class UserService {
 				.orElseThrow(() -> new RuntimeException("пользователь не найден"));
 
 		if (!passwordEncoder.matches(password, user.getPassword())) {
+			throw new RuntimeException("неверный пароль");
 		}
 		return jwtUtil.generateToken(username);
 	}
