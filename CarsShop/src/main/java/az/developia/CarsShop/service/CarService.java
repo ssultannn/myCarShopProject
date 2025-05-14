@@ -3,23 +3,52 @@ package az.developia.CarsShop.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import az.developia.CarsShop.entity.CarEntity;
+import az.developia.CarsShop.entity.UserEntity;
+import az.developia.CarsShop.jwt.SecurityUtil;
 import az.developia.CarsShop.repository.CarRepository;
+import az.developia.CarsShop.repository.UserRepository;
 
 @Service
 public class CarService {
 	@Autowired
 	private CarRepository carRepository;
 
-	public void addCar(CarEntity carEntity) {
+	@Autowired
+	private UserRepository userRepository;
+
+	public void addCarForCurrentUser(CarEntity carEntity) {
+		String username = SecurityUtil.getCurrentUsername();
+		UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException());
+		carEntity.setOwnerId(userEntity.getId());
 		carRepository.save(carEntity);
 	}
 
+	public List<CarEntity> getMyCars() {
+		String username = SecurityUtil.getCurrentUsername();
+		UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException());
+		return carRepository.findByOwnerId(userEntity.getId());
+	}
+
+	public CarEntity getMyCarById(Long id) {
+		String username = SecurityUtil.getCurrentUsername();
+		CarEntity carEntity = carRepository.findById(id).orElseThrow(() -> new RuntimeException());
+		Long currentUserId = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException()).getId();
+
+		if (!carEntity.getOwnerId().equals(currentUserId)) {
+			throw new RuntimeException("");
+		}
+		return carEntity;
+	}
+
 	public void deleteCar(Long id) {
-		carRepository.deleteById(id);
+		CarEntity carEntity = getMyCarById(id);
+		carRepository.delete(carEntity);
 	}
 
 	public List<CarEntity> getAllCars() {
@@ -47,7 +76,7 @@ public class CarService {
 	}
 
 	public void uptadeCar(Long id, CarEntity carEntity) {
-		Optional<CarEntity> oldCar = carRepository.findById(id);
+		Optional<CarEntity> oldCar = Optional.ofNullable(getMyCarById(id));
 		if (oldCar.isPresent()) {
 			CarEntity car = oldCar.get();
 			car.setBrand(carEntity.getBrand());

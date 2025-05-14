@@ -18,4 +18,7 @@ public interface CarRepository extends JpaRepository<CarEntity, Long> {
 	List<CarEntity> findAllByOrderByRatingDesc();
 	
 	List<CarEntity> findAllByRatingGreaterThanEqual(Integer minRating);
+	
+	
+
 }

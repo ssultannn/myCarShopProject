@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,10 @@ public class CarContoller {
 	public List<CarEntity> getAllCars() {
 		return carService.getAllCars();
 	}
-
+	@GetMapping("/my-cars")
+	public List<CarEntity> getMyCars() {
+		return carService.getMyCars();
+	}
 	@GetMapping("/{id}")
 	public Optional<CarEntity> getCar(@PathVariable Long id) {
 		return carService.getCarById(id);
@@ -40,12 +44,14 @@ public class CarContoller {
 	}
 
 	@PostMapping("/add")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public void addCar(@RequestBody CarEntity carEntity) {
-		carService.addCar(carEntity);
+		carService.addCarForCurrentUser(carEntity);
 
 	}
 
 	@DeleteMapping("delete/{id}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public void deleteCar(@PathVariable Long id) {
 		carService.deleteCar(id);
 	}
@@ -68,6 +74,7 @@ public class CarContoller {
 	}
 
 	@PutMapping("/update/{id}")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public void updateCar(@PathVariable Long id, @RequestBody CarEntity car) {
 		carService.uptadeCar(id, car);
 	}

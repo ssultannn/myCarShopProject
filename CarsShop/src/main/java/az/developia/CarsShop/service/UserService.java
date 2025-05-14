@@ -43,7 +43,13 @@ public class UserService {
 		authorityRepository.save(authorityEntity);
 	}
 
+
 	public String login(String username, String password) {
+		UserEntity user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new RuntimeException("пользователь не найден"));
+
+		if (!passwordEncoder.matches(password, user.getPassword())) {
+		}
 		return jwtUtil.generateToken(username);
 	}
 
