@@ -43,7 +43,6 @@ public class UserService {
 		authorityRepository.save(authorityEntity);
 	}
 
-
 	public String login(String username, String password) {
 		UserEntity user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new RuntimeException("пользователь не найден"));
@@ -54,4 +53,12 @@ public class UserService {
 		return jwtUtil.generateToken(username);
 	}
 
+	public void logout(String token) {
+		jwtUtil.invalidateToken(token);
+	}
+
+	public UserEntity getUserInfo(String username) {
+		return userRepository.findByUsername(username)
+				.orElseThrow(() -> new RuntimeException("пользователь не найден"));
+	}
 }
