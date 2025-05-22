@@ -13,6 +13,7 @@ import az.developia.CarsShop.entity.UserEntity;
 import az.developia.CarsShop.jwt.SecurityUtil;
 import az.developia.CarsShop.repository.CarRepository;
 import az.developia.CarsShop.repository.UserRepository;
+import az.developia.CarsShop.request.CarRequest;
 
 @Service
 public class CarService {
@@ -22,9 +23,21 @@ public class CarService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public void addCarForCurrentUser(CarEntity carEntity) {
+	public void addCarForCurrentUser(CarRequest carRequest) {
 		String username = SecurityUtil.getCurrentUsername();
 		UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException());
+		CarEntity carEntity = new CarEntity();
+		carEntity.setBrand(carRequest.getBrand());
+		carEntity.setModel(carRequest.getModel());
+
+		carEntity.setDescription(carRequest.getDescription());
+
+		carEntity.setPrice(carRequest.getPrice());
+
+		carEntity.setYear(carRequest.getYear());
+
+		carEntity.setImgUrl(carRequest.getImgUrl());
+		carEntity.setRating(carRequest.getRating());
 		carEntity.setOwnerId(userEntity.getId());
 		carRepository.save(carEntity);
 	}

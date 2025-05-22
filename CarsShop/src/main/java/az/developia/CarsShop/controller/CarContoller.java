@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import az.developia.CarsShop.entity.CarEntity;
+import az.developia.CarsShop.request.CarRequest;
 import az.developia.CarsShop.service.CarService;
 
 @RestController
@@ -45,7 +46,7 @@ public class CarContoller {
 
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public void addCar(@RequestBody CarEntity carEntity) {
+	public void addCar(@RequestBody CarRequest carEntity) {
 		carService.addCarForCurrentUser(carEntity);
 
 	}
