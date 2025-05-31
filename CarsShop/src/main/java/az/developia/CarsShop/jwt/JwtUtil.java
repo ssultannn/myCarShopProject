@@ -26,6 +26,11 @@ public class JwtUtil {
 
 	public void invalidateToken(String token) {
 		invalidatedTokens.add(token);
+		System.out.println(invalidatedTokens);
+	}
+
+	public boolean isTokenInvalidate(String token) {
+		return invalidatedTokens.contains(token);
 	}
 
 	private Key getSigningKey() {

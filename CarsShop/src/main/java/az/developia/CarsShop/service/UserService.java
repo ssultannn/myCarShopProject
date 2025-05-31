@@ -57,6 +57,7 @@ public class UserService {
 	public void logout(String token) {
 		SecurityContextHolder.clearContext();
 		jwtUtil.invalidateToken(token);
+		
 	}
 
 	public UserEntity getUserInfo(String username) {

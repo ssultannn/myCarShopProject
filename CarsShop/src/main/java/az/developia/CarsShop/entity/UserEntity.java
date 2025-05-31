@@ -5,6 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +24,19 @@ public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotBlank(message = "username не может быть пустым")
 	private String username;
+	@Size(min = 3, message = "пароль должен состоять из минимум трех элементов")
+	@Size(max = 900, message = "пароль должен состоять из максимум 20 элементов")
+
+	@NotBlank(message = "password не может быть пустым")
 	private String password;
 	private boolean enabled;
+	@Email(message = "Должен соответсвовать формату email")
 	private String email;
+
+	// @Pattern(regexp = "?[0-9]{10,15}$")
+	@NotBlank(message = "phoneNumber не может быть пустым")
 	private String phoneNumber;
 
 }

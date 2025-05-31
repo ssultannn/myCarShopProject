@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import az.developia.CarsShop.entity.CarEntity;
 import az.developia.CarsShop.request.CarRequest;
 import az.developia.CarsShop.service.CarService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cars")
@@ -46,7 +47,7 @@ public class CarContoller {
 
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public void addCar(@RequestBody CarRequest carEntity) {
+	public void addCar(@RequestBody @Valid CarRequest carEntity) {
 		carService.addCarForCurrentUser(carEntity);
 
 	}
@@ -76,7 +77,7 @@ public class CarContoller {
 
 	@PutMapping("/update/{id}")
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public void updateCar(@PathVariable Long id, @RequestBody CarEntity car) {
+	public void updateCar(@PathVariable Long id, @RequestBody @Valid CarEntity car) {
 		carService.uptadeCar(id, car);
 	}
 }
