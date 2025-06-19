@@ -35,7 +35,10 @@ public class UserEntity {
 	@Email(message = "Должен соответсвовать формату email")
 	private String email;
 
-	// @Pattern(regexp = "?[0-9]{10,15}$")
+	@Pattern(regexp = "^\\+994\\s?(50|51|55|70|77)[\\s\\-]?\\d{3}[\\s\\-]?\\d{2}[\\s\\-]?\\d{2}$", message = "Invalid phone number format")
+	// +994555545770
+	// +994 55 554 57 70
+	// +994 55-554-57-70
 	@NotBlank(message = "phoneNumber не может быть пустым")
 	private String phoneNumber;
 

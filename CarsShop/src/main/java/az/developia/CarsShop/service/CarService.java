@@ -89,6 +89,8 @@ public class CarService {
 	}
 
 	public void uptadeCar(Long id, CarEntity carEntity) {
+		String username = SecurityUtil.getCurrentUsername();
+		UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException());
 		Optional<CarEntity> oldCar = Optional.ofNullable(getMyCarById(id));
 		if (oldCar.isPresent()) {
 			CarEntity car = oldCar.get();
@@ -103,7 +105,7 @@ public class CarService {
 
 			car.setImgUrl(carEntity.getImgUrl());
 			car.setRating(carEntity.getRating());
-			car.setOwnerId(carEntity.getOwnerId());
+			car.setOwnerId(userEntity.getId());
 			carRepository.save(car);
 
 		}
